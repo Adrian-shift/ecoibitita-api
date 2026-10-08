@@ -1,4 +1,4 @@
-package com.ecoibitita.model;
+package com.ecoibitita.api.model;
 
 public class ConfiguracaoSistema {
     private Integer idConfiguracao;

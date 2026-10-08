@@ -1,7 +1,7 @@
-package com.ecoibitita.model.denuncia;
+package com.ecoibitita.api.model.denuncia;
 
-import com.ecoibitita.model.enums.StatusDenuncia;
-import com.ecoibitita.model.usuario.Usuario;
+import com.ecoibitita.api.model.enums.StatusDenuncia;
+import com.ecoibitita.api.model.usuario.Usuario;
 import java.time.LocalDateTime;
 
 public class HistoricoDenuncia {

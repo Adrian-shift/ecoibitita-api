@@ -1,4 +1,4 @@
-package com.ecoibitita.model.usuario;
+package com.ecoibitita.api.model.usuario;
 
 public class Cidadao extends Usuario {
     private String cpf;

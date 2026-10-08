@@ -1,7 +1,7 @@
-package com.ecoibitita.model.denuncia;
+package com.ecoibitita.api.model.denuncia;
 
 import java.time.LocalDateTime;
-import com.ecoibitita.model.usuario.Fiscal;
+import com.ecoibitita.api.model.usuario.Fiscal;
 
 
 public class ObservacaoOperacional {

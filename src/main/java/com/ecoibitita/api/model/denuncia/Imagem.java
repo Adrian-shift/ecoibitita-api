@@ -1,6 +1,6 @@
-package com.ecoibitita.model.denuncia;
+package com.ecoibitita.api.model.denuncia;
 
-import com.ecoibitita.model.enums.TipoImagem;
+import com.ecoibitita.api.model.enums.TipoImagem;
 import java.time.LocalDateTime;
 
 public class Imagem {

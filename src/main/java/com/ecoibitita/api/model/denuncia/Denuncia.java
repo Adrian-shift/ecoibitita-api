@@ -1,9 +1,9 @@
-package com.ecoibitita.model.denuncia;
+package com.ecoibitita.api.model.denuncia;
 
-import com.ecoibitita.model.enums.StatusDenuncia;
-import com.ecoibitita.model.usuario.Cidadao;
-import com.ecoibitita.model.usuario.Fiscal;
-import com.ecoibitita.model.usuario.Usuario;
+import com.ecoibitita.api.model.enums.StatusDenuncia;
+import com.ecoibitita.api.model.usuario.Cidadao;
+import com.ecoibitita.api.model.usuario.Fiscal;
+import com.ecoibitita.api.model.usuario.Usuario;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

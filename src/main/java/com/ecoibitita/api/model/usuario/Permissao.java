@@ -1,4 +1,4 @@
-package com.ecoibitita.model.usuario;
+package com.ecoibitita.api.model.usuario;
 
 public class Permissao {
     private Integer idPermissao;

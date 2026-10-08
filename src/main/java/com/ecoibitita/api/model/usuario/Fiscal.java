@@ -1,4 +1,4 @@
-package com.ecoibitita.model.usuario;
+package com.ecoibitita.api.model.usuario;
 
 public class Fiscal extends Usuario {
     private String matricula;
