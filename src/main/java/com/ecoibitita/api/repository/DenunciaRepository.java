@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DenunciaRepository extends JpaRepository<Denuncia, Long> {
+public interface DenunciaRepository extends JpaRepository<Denuncia, Integer> {
     List<Denuncia> findByStatus(String status);
-    List<Denuncia> findByBairro(String bairro);
+    List<Denuncia> findByLocalizacaoBairro(String bairro);
 }

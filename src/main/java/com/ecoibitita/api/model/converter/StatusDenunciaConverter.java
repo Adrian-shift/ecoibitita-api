@@ -1,6 +1,6 @@
 package com.ecoibitita.api.model.converter;
 
-import com.ecoibitita.model.enums.StatusDenuncia;
+import com.ecoibitita.api.model.enums.StatusDenuncia;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
