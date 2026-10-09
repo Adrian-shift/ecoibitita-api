@@ -1,8 +1,8 @@
-package com.ecoibitita.model.denuncia;
+package com.ecoibitita.api.model.denuncia;
 
-import com.ecoibitita.model.converter.TipoImagemConverter;
-import com.ecoibitita.model.enums.TipoImagem;
-import com.ecoibitita.model.usuario.Usuario;
+import com.ecoibitita.api.model.converter.TipoImagemConverter;
+import com.ecoibitita.api.model.enums.TipoImagem;
+import com.ecoibitita.api.model.usuario.Usuario;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 

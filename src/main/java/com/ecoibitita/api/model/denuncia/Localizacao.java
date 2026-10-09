@@ -1,4 +1,4 @@
-package com.ecoibitita.model.denuncia;
+package com.ecoibitita.api.model.denuncia;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

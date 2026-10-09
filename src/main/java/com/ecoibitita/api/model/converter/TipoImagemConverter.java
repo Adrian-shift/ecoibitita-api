@@ -1,6 +1,6 @@
-package com.ecoibitita.model.converter;
+package com.ecoibitita.api.model.converter;
 
-import com.ecoibitita.model.enums.TipoImagem;
+import com.ecoibitita.api.model.enums.TipoImagem;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 

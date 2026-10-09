@@ -1,4 +1,4 @@
-package com.ecoibitita.model.usuario;
+package com.ecoibitita.api.model.usuario;
 
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;

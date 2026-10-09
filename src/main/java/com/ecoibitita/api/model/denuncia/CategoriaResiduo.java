@@ -1,4 +1,4 @@
-package com.ecoibitita.model.denuncia;
+package com.ecoibitita.api.model.denuncia;
 
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;

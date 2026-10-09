@@ -1,4 +1,4 @@
-package com.ecoibitita.model;
+package com.ecoibitita.api.model;
 
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;

@@ -1,7 +1,7 @@
-package com.ecoibitita.model;
+package com.ecoibitita.api.model;
 
-import com.ecoibitita.model.denuncia.Denuncia;
-import com.ecoibitita.model.usuario.Usuario;
+import com.ecoibitita.api.model.denuncia.Denuncia;
+import com.ecoibitita.api.model.usuario.Usuario;
 import jakarta.persistence.*;
 import java.time.OffsetDateTime;
 
