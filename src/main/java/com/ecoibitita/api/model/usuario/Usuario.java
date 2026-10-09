@@ -1,35 +1,72 @@
-package com.ecoibitita.api.model.usuario;
+package com.ecoibitita.model.usuario;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
 
-public abstract class Usuario {
-    private Integer idUsuario;
-    private String nome;
-    private String email;
-    private String senhaCriptografada;
-    private String telefone;
-    private boolean ativo = true;
-    private LocalDateTime dataCadastro = LocalDateTime.now();
-    private LocalDateTime ultimoAcesso;
+@Entity
+@Table(name = "usuarios")
+public class Usuario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "perfil_id")
     private Perfil perfil;
 
-    public void registrarAcesso() {
-        this.ultimoAcesso = LocalDateTime.now();
+    @Column(nullable = false, length = 150)
+    private String nome;
+
+    @Column(nullable = false, unique = true, length = 150)
+    private String email;
+
+    @Column(name = "senha_hash", nullable = false)
+    private String senhaHash;
+
+    @Column(length = 20)
+    private String telefone;
+
+    private boolean ativo = true;
+
+    @Column(name = "criado_em")
+    private OffsetDateTime criadoEm = OffsetDateTime.now();
+
+    @Column(name = "atualizado_em")
+    private OffsetDateTime atualizadoEm = OffsetDateTime.now();
+
+    // ---------- regras de negócio ----------
+
+    public boolean temPerfil(String nomePerfil) {
+        return perfil != null && perfil.getNome().equals(nomePerfil);
     }
 
-    public void ativar()    {
+    public void ativar() {
         this.ativo = true;
+        this.atualizadoEm = OffsetDateTime.now();
     }
+
     public void desativar() {
         this.ativo = false;
+        this.atualizadoEm = OffsetDateTime.now();
     }
 
-    public Integer getIdUsuario() {
-        return idUsuario;
+    // ---------- getters e setters ----------
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Perfil getPerfil() {
+        return perfil;
+    }
+
+    public void setPerfil(Perfil perfil) {
+        this.perfil = perfil;
     }
 
     public String getNome() {
@@ -48,12 +85,12 @@ public abstract class Usuario {
         this.email = email;
     }
 
-    public String getSenhaCriptografada() {
-        return senhaCriptografada;
+    public String getSenhaHash() {
+        return senhaHash;
     }
 
-    public void setSenhaCriptografada(String senhaCriptografada) {
-        this.senhaCriptografada = senhaCriptografada;
+    public void setSenhaHash(String senhaHash) {
+        this.senhaHash = senhaHash;
     }
 
     public String getTelefone() {
@@ -72,28 +109,19 @@ public abstract class Usuario {
         this.ativo = ativo;
     }
 
-    public LocalDateTime getDataCadastro() {
-        return dataCadastro;
+    public OffsetDateTime getCriadoEm() {
+        return criadoEm;
     }
 
-    public void setDataCadastro(LocalDateTime dataCadastro) {
-        this.dataCadastro = dataCadastro;
+    public void setCriadoEm(OffsetDateTime criadoEm) {
+        this.criadoEm = criadoEm;
     }
 
-    public LocalDateTime getUltimoAcesso() {
-        return ultimoAcesso;
+    public OffsetDateTime getAtualizadoEm() {
+        return atualizadoEm;
     }
 
-    public void setUltimoAcesso(LocalDateTime ultimoAcesso) {
-        this.ultimoAcesso = ultimoAcesso;
+    public void setAtualizadoEm(OffsetDateTime atualizadoEm) {
+        this.atualizadoEm = atualizadoEm;
     }
-
-    public Perfil getPerfil() {
-        return perfil;
-    }
-
-    public void setPerfil(Perfil perfil) {
-        this.perfil = perfil;
-    }
-
 }

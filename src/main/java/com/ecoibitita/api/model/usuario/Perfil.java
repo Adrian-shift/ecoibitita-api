@@ -1,24 +1,28 @@
-package com.ecoibitita.api.model.usuario;
+package com.ecoibitita.model.usuario;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "perfis")
 public class Perfil {
-    private Integer idPerfil;
+
+    public static final String ADMINISTRADOR = "Administrador";
+    public static final String FISCAL = "Fiscal";
+    public static final String CIDADAO = "Cidadão";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false, unique = true, length = 50)
     private String nome;
-    private String descricao;
-    private List<Permissao> permissoes = new ArrayList<>();
 
-    public boolean possuiPermissao(String nomePermissao) {
-        return permissoes.stream().anyMatch(p -> p.getNome().equals(nomePermissao));
+    public Integer getId() {
+        return id;
     }
 
-    public Integer getIdPerfil() {
-        return idPerfil;
-    }
-
-    public void setIdPerfil(Integer idPerfil) {
-        this.idPerfil = idPerfil;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -27,21 +31,5 @@ public class Perfil {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public List<Permissao> getPermissoes() {
-        return permissoes;
-    }
-
-    public void setPermissoes(List<Permissao> permissoes) {
-        this.permissoes = permissoes;
     }
 }

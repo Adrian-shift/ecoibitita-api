@@ -1,58 +1,48 @@
-package com.ecoibitita.api.model;
+package com.ecoibitita.model;
 
-import com.ecoibitita.api.model.denuncia.Denuncia;
-import com.ecoibitita.api.model.usuario.Usuario;
-import java.time.LocalDateTime;
+import com.ecoibitita.model.denuncia.Denuncia;
+import com.ecoibitita.model.usuario.Usuario;
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
 
+@Entity
+@Table(name = "notificacoes")
 public class Notificacao {
-    private Integer idNotificacao;
-    private String mensagem;
-    private String tipo;
-    private LocalDateTime dataEnvio = LocalDateTime.now();
-    private boolean lida;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario destinatario;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "denuncia_id")
     private Denuncia denuncia;
 
-    public void marcarComoLida() { this.lida = true; }
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String mensagem;
 
-    public Integer getIdNotificacao() {
-        return idNotificacao;
+    private boolean lida = false;
+
+    @Column(name = "enviada_em")
+    private OffsetDateTime enviadaEm = OffsetDateTime.now();
+
+    // ---------- regras de negócio ----------
+
+    public void marcarComoLida() {
+        this.lida = true;
     }
 
-    public void setIdNotificacao(Integer idNotificacao) {
-        this.idNotificacao = idNotificacao;
+    // ---------- getters e setters ----------
+
+    public Integer getId() {
+        return id;
     }
 
-    public String getMensagem() {
-        return mensagem;
-    }
-
-    public void setMensagem(String mensagem) {
-        this.mensagem = mensagem;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public LocalDateTime getDataEnvio() {
-        return dataEnvio;
-    }
-
-    public void setDataEnvio(LocalDateTime dataEnvio) {
-        this.dataEnvio = dataEnvio;
-    }
-
-    public boolean isLida() {
-        return lida;
-    }
-
-    public void setLida(boolean lida) {
-        this.lida = lida;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Usuario getDestinatario() {
@@ -69,5 +59,29 @@ public class Notificacao {
 
     public void setDenuncia(Denuncia denuncia) {
         this.denuncia = denuncia;
+    }
+
+    public String getMensagem() {
+        return mensagem;
+    }
+
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
+
+    public boolean isLida() {
+        return lida;
+    }
+
+    public void setLida(boolean lida) {
+        this.lida = lida;
+    }
+
+    public OffsetDateTime getEnviadaEm() {
+        return enviadaEm;
+    }
+
+    public void setEnviadaEm(OffsetDateTime enviadaEm) {
+        this.enviadaEm = enviadaEm;
     }
 }

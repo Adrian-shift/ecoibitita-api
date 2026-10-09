@@ -1,31 +1,63 @@
-package com.ecoibitita.api.model.denuncia;
+package com.ecoibitita.model.denuncia;
 
-import com.ecoibitita.api.model.enums.StatusDenuncia;
-import com.ecoibitita.api.model.usuario.Usuario;
-import java.time.LocalDateTime;
+import com.ecoibitita.model.converter.StatusDenunciaConverter;
+import com.ecoibitita.model.enums.StatusDenuncia;
+import com.ecoibitita.model.usuario.Usuario;
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
 
+@Entity
+@Table(name = "historico_status")
 public class HistoricoDenuncia {
-    private Integer idHistorico;
-    private LocalDateTime dataHora = LocalDateTime.now();
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "denuncia_id")
+    private Denuncia denuncia;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    @Convert(converter = StatusDenunciaConverter.class)
+    @Column(name = "status_anterior", length = 30)
     private StatusDenuncia statusAnterior;
+
+    @Convert(converter = StatusDenunciaConverter.class)
+    @Column(name = "status_novo", nullable = false, length = 30)
     private StatusDenuncia statusNovo;
+
+    @Column(length = 255)
     private String observacao;
-    private Usuario responsavel;
 
-    public Integer getIdHistorico() {
-        return idHistorico;
+    @Column(name = "alterado_em")
+    private OffsetDateTime alteradoEm = OffsetDateTime.now();
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdHistorico(Integer idHistorico) {
-        this.idHistorico = idHistorico;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public LocalDateTime getDataHora() {
-        return dataHora;
+    public Denuncia getDenuncia() {
+        return denuncia;
     }
 
-    public void setDataHora(LocalDateTime dataHora) {
-        this.dataHora = dataHora;
+    public void setDenuncia(Denuncia denuncia) {
+        this.denuncia = denuncia;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     public StatusDenuncia getStatusAnterior() {
@@ -52,11 +84,11 @@ public class HistoricoDenuncia {
         this.observacao = observacao;
     }
 
-    public Usuario getResponsavel() {
-        return responsavel;
+    public OffsetDateTime getAlteradoEm() {
+        return alteradoEm;
     }
 
-    public void setResponsavel(Usuario responsavel) {
-        this.responsavel = responsavel;
+    public void setAlteradoEm(OffsetDateTime alteradoEm) {
+        this.alteradoEm = alteradoEm;
     }
 }

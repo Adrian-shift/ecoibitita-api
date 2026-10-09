@@ -1,34 +1,54 @@
-package com.ecoibitita.api.model;
+package com.ecoibitita.model;
 
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
+
+@Entity
+@Table(name = "configuracoes_sistema")
 public class ConfiguracaoSistema {
-    private Integer idConfiguracao;
-    private String nome;
+
+    public static final String DENUNCIA_ANONIMA_HABILITADA = "DENUNCIA_ANONIMA_HABILITADA";
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false, unique = true, length = 100)
+    private String chave;
+
+    @Column(nullable = false)
     private String valor;
-    private String descricao;
-    private boolean ativo = true;
+
+    @Column(name = "atualizado_em")
+    private OffsetDateTime atualizadoEm = OffsetDateTime.now();
+
+    // ---------- regras de negócio ----------
 
     public boolean valorComoBoolean() {
         return Boolean.parseBoolean(valor);
     }
 
-    public int valorComoInteiro() {
-        return Integer.parseInt(valor);
+    public void alterarValor(String novoValor) {
+        this.valor = novoValor;
+        this.atualizadoEm = OffsetDateTime.now();
     }
 
-    public Integer getIdConfiguracao() {
-        return idConfiguracao;
+    // ---------- getters e setters ----------
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdConfiguracao(Integer idConfiguracao) {
-        this.idConfiguracao = idConfiguracao;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getNome() {
-        return nome;
+    public String getChave() {
+        return chave;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setChave(String chave) {
+        this.chave = chave;
     }
 
     public String getValor() {
@@ -39,19 +59,11 @@ public class ConfiguracaoSistema {
         this.valor = valor;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public OffsetDateTime getAtualizadoEm() {
+        return atualizadoEm;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public boolean isAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
+    public void setAtualizadoEm(OffsetDateTime atualizadoEm) {
+        this.atualizadoEm = atualizadoEm;
     }
 }

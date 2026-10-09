@@ -1,41 +1,43 @@
-package com.ecoibitita.api.model.denuncia;
+package com.ecoibitita.model.denuncia;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import java.math.BigDecimal;
+
+@Embeddable
 public class Localizacao {
-    private Integer idLocalizacao;
-    private double latitude;
-    private double longitude;
+
+    @Column(nullable = false, precision = 10, scale = 8)
+    private BigDecimal latitude;
+
+    @Column(nullable = false, precision = 11, scale = 8)
+    private BigDecimal longitude;
+
+    @Column(length = 255)
     private String endereco;
+
+    @Column(nullable = false, length = 100)
     private String bairro;
-    private String cidade;
-    private String estado;
-    private String cep;
 
-    public void atualizarCoordenadas(double latitude, double longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-    }
+    @Column(length = 100)
+    private String cidade = "Ibititá";
 
-    public Integer getIdLocalizacao() {
-        return idLocalizacao;
-    }
+    @Column(name = "ponto_referencia", length = 255)
+    private String pontoReferencia;
 
-    public void setIdLocalizacao(Integer idLocalizacao) {
-        this.idLocalizacao = idLocalizacao;
-    }
-
-    public double getLatitude() {
+    public BigDecimal getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(BigDecimal latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public BigDecimal getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(BigDecimal longitude) {
         this.longitude = longitude;
     }
 
@@ -63,19 +65,11 @@ public class Localizacao {
         this.cidade = cidade;
     }
 
-    public String getEstado() {
-        return estado;
+    public String getPontoReferencia() {
+        return pontoReferencia;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public String getCep() {
-        return cep;
-    }
-
-    public void setCep(String cep) {
-        this.cep = cep;
+    public void setPontoReferencia(String pontoReferencia) {
+        this.pontoReferencia = pontoReferencia;
     }
 }

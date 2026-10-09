@@ -1,53 +1,74 @@
-package com.ecoibitita.api.model;
+package com.ecoibitita.model;
 
-import com.ecoibitita.api.model.usuario.Usuario;
-import java.time.LocalDateTime;
+import com.ecoibitita.model.usuario.Usuario;
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
 
+@Entity
+@Table(name = "logs_auditoria")
 public class RegistroAuditoria {
-    private Integer idRegistro;
-    private LocalDateTime dataHora = LocalDateTime.now();
-    private String operacao;
-    private String entidade;
-    private Integer idEntidade;
-    private String descricao;
-    private String enderecoIP;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public static RegistroAuditoria registrar(Usuario usuario, String operacao,
-                                              String entidade, Integer idEntidade,
-                                              String descricao, String enderecoIP) {
+    @Column(nullable = false, length = 100)
+    private String acao;                 // ex.: "ALTERAR_STATUS", "LOGIN"
+
+    @Column(length = 50)
+    private String entidade;             // ex.: "Denuncia"
+
+    @Column(name = "entidade_id")
+    private Integer entidadeId;
+
+    @Column(columnDefinition = "TEXT")
+    private String detalhes;             // se precisar do IP, escreva aqui
+
+    @Column(name = "data_hora")
+    private OffsetDateTime dataHora = OffsetDateTime.now();
+
+    // ---------- regras de negócio ----------
+
+    public static RegistroAuditoria registrar(Usuario usuario, String acao,
+                                              String entidade, Integer entidadeId,
+                                              String detalhes) {
         RegistroAuditoria r = new RegistroAuditoria();
         r.usuario = usuario;
-        r.operacao = operacao;
+        r.acao = acao;
         r.entidade = entidade;
-        r.idEntidade = idEntidade;
-        r.descricao = descricao;
-        r.enderecoIP = enderecoIP;
+        r.entidadeId = entidadeId;
+        r.detalhes = detalhes;
         return r;
     }
 
-    public Integer getIdRegistro() {
-        return idRegistro;
+    // ---------- getters e setters ----------
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdRegistro(Integer idRegistro) {
-        this.idRegistro = idRegistro;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public LocalDateTime getDataHora() {
-        return dataHora;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setDataHora(LocalDateTime dataHora) {
-        this.dataHora = dataHora;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public String getOperacao() {
-        return operacao;
+    public String getAcao() {
+        return acao;
     }
 
-    public void setOperacao(String operacao) {
-        this.operacao = operacao;
+    public void setAcao(String acao) {
+        this.acao = acao;
     }
 
     public String getEntidade() {
@@ -58,35 +79,27 @@ public class RegistroAuditoria {
         this.entidade = entidade;
     }
 
-    public Integer getIdEntidade() {
-        return idEntidade;
+    public Integer getEntidadeId() {
+        return entidadeId;
     }
 
-    public void setIdEntidade(Integer idEntidade) {
-        this.idEntidade = idEntidade;
+    public void setEntidadeId(Integer entidadeId) {
+        this.entidadeId = entidadeId;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDetalhes() {
+        return detalhes;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setDetalhes(String detalhes) {
+        this.detalhes = detalhes;
     }
 
-    public String getEnderecoIP() {
-        return enderecoIP;
+    public OffsetDateTime getDataHora() {
+        return dataHora;
     }
 
-    public void setEnderecoIP(String enderecoIP) {
-        this.enderecoIP = enderecoIP;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
+    public void setDataHora(OffsetDateTime dataHora) {
+        this.dataHora = dataHora;
     }
 }

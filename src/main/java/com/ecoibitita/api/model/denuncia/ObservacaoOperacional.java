@@ -1,44 +1,68 @@
-package com.ecoibitita.api.model.denuncia;
+package com.ecoibitita.model.denuncia;
 
-import java.time.LocalDateTime;
-import com.ecoibitita.api.model.usuario.Fiscal;
+import com.ecoibitita.model.usuario.Usuario;
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
 
-
+@Entity
+@Table(name = "observacoes_operacionais")
 public class ObservacaoOperacional {
-    private Integer idObservacao;
-    private String texto;
-    private LocalDateTime dataHora = LocalDateTime.now();
-    private Fiscal fiscal;
 
-    public Integer getIdObservacao() {
-        return idObservacao;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "denuncia_id")
+    private Denuncia denuncia;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "fiscal_id")
+    private Usuario fiscal;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String observacao;
+
+    @Column(name = "criado_em")
+    private OffsetDateTime criadoEm = OffsetDateTime.now();
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdObservacao(Integer idObservacao) {
-        this.idObservacao = idObservacao;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public String getTexto() {
-        return texto;
+    public Denuncia getDenuncia() {
+        return denuncia;
     }
 
-    public void setTexto(String texto) {
-        this.texto = texto;
+    public void setDenuncia(Denuncia denuncia) {
+        this.denuncia = denuncia;
     }
 
-    public LocalDateTime getDataHora() {
-        return dataHora;
-    }
-
-    public void setDataHora(LocalDateTime dataHora) {
-        this.dataHora = dataHora;
-    }
-
-    public Fiscal getFiscal() {
+    public Usuario getFiscal() {
         return fiscal;
     }
 
-    public void setFiscal(Fiscal fiscal) {
+    public void setFiscal(Usuario fiscal) {
         this.fiscal = fiscal;
+    }
+
+    public String getObservacao() {
+        return observacao;
+    }
+
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
+    }
+
+    public OffsetDateTime getCriadoEm() {
+        return criadoEm;
+    }
+
+    public void setCriadoEm(OffsetDateTime criadoEm) {
+        this.criadoEm = criadoEm;
     }
 }

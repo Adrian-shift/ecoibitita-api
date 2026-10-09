@@ -1,23 +1,45 @@
-package com.ecoibitita.api.model.denuncia;
+package com.ecoibitita.model.denuncia;
 
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
 
+@Entity
+@Table(name = "categorias_residuos")
 public class CategoriaResiduo {
-    private Integer idCategoria;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false, unique = true, length = 100)
     private String nome;
+
+    @Column(columnDefinition = "TEXT")
     private String descricao;
+
     private boolean ativo = true;
-    private LocalDateTime dataCadastro = LocalDateTime.now();
 
-    public void ativar()    { this.ativo = true; }
-    public void desativar() { this.ativo = false; }
+    @Column(name = "criado_em")
+    private OffsetDateTime criadoEm = OffsetDateTime.now();
 
-    public Integer getIdCategoria() {
-        return idCategoria;
+    // ---------- regras de negócio ----------
+
+    public void ativar() {
+        this.ativo = true;
     }
 
-    public void setIdCategoria(Integer idCategoria) {
-        this.idCategoria = idCategoria;
+    public void desativar() {
+        this.ativo = false;
+    }
+
+    // ---------- getters e setters ----------
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -44,11 +66,11 @@ public class CategoriaResiduo {
         this.ativo = ativo;
     }
 
-    public LocalDateTime getDataCadastro() {
-        return dataCadastro;
+    public OffsetDateTime getCriadoEm() {
+        return criadoEm;
     }
 
-    public void setDataCadastro(LocalDateTime dataCadastro) {
-        this.dataCadastro = dataCadastro;
+    public void setCriadoEm(OffsetDateTime criadoEm) {
+        this.criadoEm = criadoEm;
     }
 }

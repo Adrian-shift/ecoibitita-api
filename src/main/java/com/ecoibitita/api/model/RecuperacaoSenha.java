@@ -1,78 +1,48 @@
-package com.ecoibitita.api.model;
+package com.ecoibitita.model;
 
-import com.ecoibitita.api.model.usuario.Usuario;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import com.ecoibitita.model.usuario.Usuario;
+import jakarta.persistence.*;
+import java.time.OffsetDateTime;
 
+@Entity
+@Table(name = "recuperacao_senha")
 public class RecuperacaoSenha {
-    private Integer idRecuperacao;
-    private String token;
-    private LocalDateTime dataSolicitacao = LocalDateTime.now();
-    private LocalDateTime dataExpiracao;
-    private boolean utilizado = false;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    public RecuperacaoSenha() {
-    }
+    // guarda apenas o HASH do token; o token em si só vai por e-mail
+    @Column(name = "token_hash", nullable = false)
+    private String tokenHash;
 
-    public RecuperacaoSenha(Usuario usuario) {
-        this.usuario = usuario;
-        gerarToken();
-    }
+    @Column(name = "expira_em", nullable = false)
+    private OffsetDateTime expiraEm;
 
-    public void gerarToken() {
-        this.token = UUID.randomUUID().toString();
-        this.dataSolicitacao = LocalDateTime.now();
-        this.dataExpiracao = this.dataSolicitacao.plusMinutes(30);
-        this.utilizado = false;
-    }
+    private boolean usado = false;
+
+    // ---------- regras de negócio ----------
 
     public boolean tokenValido() {
-        return !utilizado && LocalDateTime.now().isBefore(dataExpiracao);
+        return !usado && OffsetDateTime.now().isBefore(expiraEm);
     }
 
-    public void marcarComoUtilizado() {
-        this.utilizado = true;
+    public void marcarComoUsado() {
+        this.usado = true;
     }
 
-    public Integer getIdRecuperacao() {
-        return idRecuperacao;
+    // ---------- getters e setters ----------
+
+    public Integer getId() {
+        return id;
     }
 
-    public void setIdRecuperacao(Integer idRecuperacao) {
-        this.idRecuperacao = idRecuperacao;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public LocalDateTime getDataSolicitacao() {
-        return dataSolicitacao;
-    }
-
-    public void setDataSolicitacao(LocalDateTime dataSolicitacao) {
-        this.dataSolicitacao = dataSolicitacao;
-    }
-
-    public LocalDateTime getDataExpiracao() {
-        return dataExpiracao;
-    }
-
-    public void setDataExpiracao(LocalDateTime dataExpiracao) {
-        this.dataExpiracao = dataExpiracao;
-    }
-
-    public boolean isUtilizado() {
-        return utilizado;
-    }
-
-    public void setUtilizado(boolean utilizado) {
-        this.utilizado = utilizado;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Usuario getUsuario() {
@@ -81,5 +51,29 @@ public class RecuperacaoSenha {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public String getTokenHash() {
+        return tokenHash;
+    }
+
+    public void setTokenHash(String tokenHash) {
+        this.tokenHash = tokenHash;
+    }
+
+    public OffsetDateTime getExpiraEm() {
+        return expiraEm;
+    }
+
+    public void setExpiraEm(OffsetDateTime expiraEm) {
+        this.expiraEm = expiraEm;
+    }
+
+    public boolean isUsado() {
+        return usado;
+    }
+
+    public void setUsado(boolean usado) {
+        this.usado = usado;
     }
 }
