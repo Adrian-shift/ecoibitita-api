@@ -1,6 +1,6 @@
-package com.ecoibitita.dao;
+package com.ecoibitita.api.dao;
 
-import com.ecoibitita.model.RegistroAuditoria;
+import com.ecoibitita.api.model.RegistroAuditoria;
 
 import java.time.OffsetDateTime;
 import java.util.List;

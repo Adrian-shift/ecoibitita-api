@@ -1,6 +1,6 @@
-package com.ecoibitita.dao;
+package com.ecoibitita.api.dao;
 
-import com.ecoibitita.model.Notificacao;
+import com.ecoibitita.api.model.Notificacao;
 
 import java.util.List;
 

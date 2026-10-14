@@ -1,6 +1,6 @@
-package com.ecoibitita.dao;
+package com.ecoibitita.api.dao;
 
-import com.ecoibitita.model.usuario.Usuario;
+import com.ecoibitita.api.model.usuario.Usuario;
 
 import java.util.List;
 import java.util.Optional;

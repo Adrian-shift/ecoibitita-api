@@ -1,4 +1,4 @@
-package com.ecoibitita.dao;
+package com.ecoibitita.api.dao;
 
 import java.util.List;
 import java.util.Optional;

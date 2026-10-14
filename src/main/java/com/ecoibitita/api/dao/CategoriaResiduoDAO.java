@@ -1,6 +1,6 @@
-package com.ecoibitita.dao;
+package com.ecoibitita.api.dao;
 
-import com.ecoibitita.model.denuncia.CategoriaResiduo;
+import com.ecoibitita.api.model.denuncia.CategoriaResiduo;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,7 +1,7 @@
-package com.ecoibitita.dao;
+package com.ecoibitita.api.dao;
 
-import com.ecoibitita.model.denuncia.Denuncia;
-import com.ecoibitita.model.enums.StatusDenuncia;
+import com.ecoibitita.api.model.denuncia.Denuncia;
+import com.ecoibitita.api.model.enums.StatusDenuncia;
 
 import java.time.OffsetDateTime;
 import java.util.List;

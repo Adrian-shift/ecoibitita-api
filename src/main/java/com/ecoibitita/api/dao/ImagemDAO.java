@@ -1,6 +1,6 @@
-package com.ecoibitita.dao;
+package com.ecoibitita.api.dao;
 
-import com.ecoibitita.model.denuncia.Imagem;
+import com.ecoibitita.api.model.denuncia.Imagem;
 
 import java.util.List;
 

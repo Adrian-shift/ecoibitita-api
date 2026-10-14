@@ -1,6 +1,6 @@
-package com.ecoibitita.dao;
+package com.ecoibitita.api.dao;
 
-import com.ecoibitita.model.denuncia.HistoricoDenuncia;
+import com.ecoibitita.api.model.denuncia.HistoricoDenuncia;
 
 import java.util.List;
 

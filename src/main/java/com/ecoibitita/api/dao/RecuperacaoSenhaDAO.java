@@ -1,6 +1,6 @@
-package com.ecoibitita.dao;
+package com.ecoibitita.api.dao;
 
-import com.ecoibitita.model.RecuperacaoSenha;
+import com.ecoibitita.api.model.RecuperacaoSenha;
 
 import java.util.Optional;
 

@@ -1,6 +1,6 @@
-package com.ecoibitita.dao;
+package com.ecoibitita.api.dao;
 
-import com.ecoibitita.model.ConfiguracaoSistema;
+import com.ecoibitita.api.model.ConfiguracaoSistema;
 
 import java.util.Optional;
 
