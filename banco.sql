@@ -126,9 +126,6 @@ CREATE INDEX idx_denuncias_data ON denuncias(data_registro);
 CREATE INDEX idx_imagens_denuncia_id ON imagens_denuncia(denuncia_id);
 
 
-select * from configuracoes_sistema;
-
-
 CREATE TABLE configuracoes_sistema (
     id SERIAL PRIMARY KEY,
     chave VARCHAR(100) NOT NULL UNIQUE,
@@ -144,3 +141,7 @@ CREATE TABLE recuperacao_senha (
     expira_em TIMESTAMP WITH TIME ZONE NOT NULL,
     usado BOOLEAN DEFAULT FALSE
 );
+
+CREATE INDEX idx_denuncias_usuario ON denuncias(usuario_id);
+CREATE INDEX idx_notificacoes_usuario_lida ON notificacoes(usuario_id, lida);
+CREATE INDEX idx_recuperacao_token ON recuperacao_senha(token_hash);
