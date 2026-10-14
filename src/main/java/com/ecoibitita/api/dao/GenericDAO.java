@@ -3,12 +3,9 @@ package com.ecoibitita.api.dao;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Contrato CRUD comum a todos os DAOs.
- *
- * @param <T>  tipo da entidade
- * @param <ID> tipo da chave primária
- */
+
+// <T>  tipo entidade
+// <ID> tipo pk
 public interface GenericDAO<T, ID> {
 
     T salvar(T entidade);

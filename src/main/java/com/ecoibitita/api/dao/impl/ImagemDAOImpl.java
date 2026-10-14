@@ -1,7 +1,7 @@
-package com.ecoibitita.dao.impl;
+package com.ecoibitita.api.dao.impl;
 
-import com.ecoibitita.dao.ImagemDAO;
-import com.ecoibitita.model.denuncia.Imagem;
+import com.ecoibitita.api.dao.ImagemDAO;
+import com.ecoibitita.api.model.denuncia.Imagem;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

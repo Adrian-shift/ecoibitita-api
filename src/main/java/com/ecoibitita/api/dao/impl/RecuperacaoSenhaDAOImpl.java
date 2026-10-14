@@ -1,7 +1,7 @@
-package com.ecoibitita.dao.impl;
+package com.ecoibitita.api.dao.impl;
 
-import com.ecoibitita.dao.RecuperacaoSenhaDAO;
-import com.ecoibitita.model.RecuperacaoSenha;
+import com.ecoibitita.api.dao.RecuperacaoSenhaDAO;
+import com.ecoibitita.api.model.RecuperacaoSenha;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

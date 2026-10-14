@@ -1,7 +1,7 @@
-package com.ecoibitita.dao.impl;
+package com.ecoibitita.api.dao.impl;
 
-import com.ecoibitita.dao.NotificacaoDAO;
-import com.ecoibitita.model.Notificacao;
+import com.ecoibitita.api.dao.NotificacaoDAO;
+import com.ecoibitita.api.model.Notificacao;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

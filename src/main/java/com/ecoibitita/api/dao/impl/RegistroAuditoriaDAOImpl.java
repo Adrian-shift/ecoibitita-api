@@ -1,7 +1,7 @@
-package com.ecoibitita.dao.impl;
+package com.ecoibitita.api.dao.impl;
 
-import com.ecoibitita.dao.RegistroAuditoriaDAO;
-import com.ecoibitita.model.RegistroAuditoria;
+import com.ecoibitita.api.dao.RegistroAuditoriaDAO;
+import com.ecoibitita.api.model.RegistroAuditoria;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

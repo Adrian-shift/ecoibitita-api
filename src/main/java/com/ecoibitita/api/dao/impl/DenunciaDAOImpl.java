@@ -1,8 +1,8 @@
-package com.ecoibitita.dao.impl;
+package com.ecoibitita.api.dao.impl;
 
-import com.ecoibitita.dao.DenunciaDAO;
-import com.ecoibitita.model.denuncia.Denuncia;
-import com.ecoibitita.model.enums.StatusDenuncia;
+import com.ecoibitita.api.dao.DenunciaDAO;
+import com.ecoibitita.api.model.denuncia.Denuncia;
+import com.ecoibitita.api.model.enums.StatusDenuncia;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,7 +1,7 @@
-package com.ecoibitita.dao.impl;
+package com.ecoibitita.api.dao.impl;
 
-import com.ecoibitita.dao.UsuarioDAO;
-import com.ecoibitita.model.usuario.Usuario;
+import com.ecoibitita.api.dao.UsuarioDAO;
+import com.ecoibitita.api.model.usuario.Usuario;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

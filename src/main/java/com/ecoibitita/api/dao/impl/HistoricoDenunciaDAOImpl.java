@@ -1,7 +1,7 @@
-package com.ecoibitita.dao.impl;
+package com.ecoibitita.api.dao.impl;
 
-import com.ecoibitita.dao.HistoricoDenunciaDAO;
-import com.ecoibitita.model.denuncia.HistoricoDenuncia;
+import com.ecoibitita.api.dao.HistoricoDenunciaDAO;
+import com.ecoibitita.api.model.denuncia.HistoricoDenuncia;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

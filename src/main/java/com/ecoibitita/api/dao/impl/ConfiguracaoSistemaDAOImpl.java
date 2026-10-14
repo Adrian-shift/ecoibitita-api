@@ -1,7 +1,7 @@
-package com.ecoibitita.dao.impl;
+package com.ecoibitita.api.dao.impl;
 
-import com.ecoibitita.dao.ConfiguracaoSistemaDAO;
-import com.ecoibitita.model.ConfiguracaoSistema;
+import com.ecoibitita.api.dao.ConfiguracaoSistemaDAO;
+import com.ecoibitita.api.model.ConfiguracaoSistema;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

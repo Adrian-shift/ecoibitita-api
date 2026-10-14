@@ -1,7 +1,7 @@
-package com.ecoibitita.dao.impl;
+package com.ecoibitita.api.dao.impl;
 
-import com.ecoibitita.dao.ObservacaoOperacionalDAO;
-import com.ecoibitita.model.denuncia.ObservacaoOperacional;
+import com.ecoibitita.api.dao.ObservacaoOperacionalDAO;
+import com.ecoibitita.api.model.denuncia.ObservacaoOperacional;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -1,7 +1,7 @@
-package com.ecoibitita.dao.impl;
+package com.ecoibitita.api.dao.impl;
 
-import com.ecoibitita.dao.CategoriaResiduoDAO;
-import com.ecoibitita.model.denuncia.CategoriaResiduo;
+import com.ecoibitita.api.dao.CategoriaResiduoDAO;
+import com.ecoibitita.api.model.denuncia.CategoriaResiduo;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
