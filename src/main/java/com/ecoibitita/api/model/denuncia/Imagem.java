@@ -21,8 +21,8 @@ public class Imagem {
     @Column(name = "url_imagem", nullable = false, length = 500)
     private String urlImagem;
 
-    @Column(name = "public_id_cloudinary", length = 150)
-    private String publicIdCloudinary;
+    @Column(name = "chave_armazenamento", length = 150)
+    private String chaveArmazenamento;
 
     @Convert(converter = TipoImagemConverter.class)
     @Column(name = "tipo_foto", length = 20)
@@ -59,12 +59,12 @@ public class Imagem {
         this.urlImagem = urlImagem;
     }
 
-    public String getPublicIdCloudinary() {
-        return publicIdCloudinary;
+    public String getChaveArmazenamento() {
+        return chaveArmazenamento;
     }
 
-    public void setPublicIdCloudinary(String publicIdCloudinary) {
-        this.publicIdCloudinary = publicIdCloudinary;
+    public void setChaveArmazenamento(String chaveArmazenamento) {
+        this.chaveArmazenamento = chaveArmazenamento;
     }
 
     public TipoImagem getTipoImagem() {

@@ -1,5 +1,11 @@
 package com.ecoibitita.api.controller;
 
+
+import com.ecoibitita.api.service.ArmazenamentoImagemService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.ecoibitita.api.model.usuario.Usuario;
 import com.ecoibitita.api.repository.DenunciaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,4 +46,23 @@ public class TesteController {
         }
         return response;
     }
+
+    @Autowired
+    private ArmazenamentoImagemService armazenamento;
+
+    @PostMapping("/test-upload")
+    public Map<String, Object> testUpload(@RequestParam("arquivo") MultipartFile arquivo) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            var salvo = armazenamento.salvar(arquivo, "TESTE");
+            response.put("status", "OK");
+            response.put("url", salvo.url());
+            response.put("chave", salvo.chave());
+        } catch (Exception e) {
+            response.put("status", "ERROR");
+            response.put("message", e.getMessage());
+        }
+        return response;
+    }
+
 }

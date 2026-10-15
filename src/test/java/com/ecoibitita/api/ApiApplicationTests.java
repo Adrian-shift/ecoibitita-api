@@ -6,6 +6,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import javax.sql.DataSource;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -47,5 +50,4 @@ class ApiApplicationTests {
 		System.out.println("✅ Tabelas encontradas no banco: " + tableCount);
 		assertTrue(tableCount > 0, "Banco deve ter tabelas");
 	}
-
 }
