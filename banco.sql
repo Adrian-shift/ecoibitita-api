@@ -146,5 +146,5 @@ CREATE INDEX idx_denuncias_usuario ON denuncias(usuario_id);
 CREATE INDEX idx_notificacoes_usuario_lida ON notificacoes(usuario_id, lida);
 CREATE INDEX idx_recuperacao_token ON recuperacao_senha(token_hash);
 
---ALTER TABLE imagens_denuncia
---RENAME COLUMN public_id_cloudinary TO chave_armazenamento;
+ALTER TABLE imagens_denuncia
+RENAME COLUMN public_id_cloudinary TO chave_armazenamento;
