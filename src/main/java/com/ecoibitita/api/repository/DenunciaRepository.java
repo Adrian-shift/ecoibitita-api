@@ -10,14 +10,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
-public interface DenunciaRepository extends JpaRepository<Denuncia, Integer> {
+public interface DenunciaRepository extends JpaRepository<Denuncia, Integer>,
+        JpaSpecificationExecutor<Denuncia> {
 
     List<Denuncia> findByStatus(StatusDenuncia status);
 
@@ -27,9 +26,13 @@ public interface DenunciaRepository extends JpaRepository<Denuncia, Integer> {
 
     List<Denuncia> findByCidadaoIdOrderByDataRegistroDesc(Integer usuarioId);
 
+    List<Denuncia> findByProtocoloIn(Collection<String> protocolos);
+
     @Query("select d.status, count(d) from Denuncia d group by d.status")
     List<Object[]> contarPorStatus();
 
     @Query("select d.localizacao.bairro, count(d) from Denuncia d group by d.localizacao.bairro")
     List<Object[]> contarPorBairro();
+
+
 }
