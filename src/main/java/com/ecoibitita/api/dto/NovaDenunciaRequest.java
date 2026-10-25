@@ -10,23 +10,29 @@ public record NovaDenunciaRequest(
         Integer categoriaId,
 
         @NotNull(message = "A latitude é obrigatória")
-        @DecimalMin("-90.0") @DecimalMax("90.0")
-        @Digits(integer = 2, fraction = 8)
+        @DecimalMin(value = "-90.0", message = "Latitude inválida")
+        @DecimalMax(value = "90.0", message = "Latitude inválida")
+        @Digits(integer = 2, fraction = 8, message = "Latitude inválida")
         BigDecimal latitude,
 
         @NotNull(message = "A longitude é obrigatória")
-        @DecimalMin("-180.0") @DecimalMax("180.0")
-        @Digits(integer = 3, fraction = 8)
+        @DecimalMin(value = "-180.0", message = "Longitude inválida")
+        @DecimalMax(value = "180.0", message = "Longitude inválida")
+        @Digits(integer = 3, fraction = 8, message = "Longitude inválida")
         BigDecimal longitude,
 
-        @Size(max = 255) String endereco,
+        @Size(max = 255, message = "O endereço deve ter no máximo 255 caracteres")
+        String endereco,
 
         @NotBlank(message = "O bairro é obrigatório")
-        @Size(max = 100) String bairro,
+        @Size(max = 100, message = "O bairro deve ter no máximo 100 caracteres")
+        String bairro,
 
-        @Size(max = 255) String pontoReferencia,
+        @Size(max = 255, message = "O ponto de referência deve ter no máximo 255 caracteres")
+        String pontoReferencia,
 
-        @Size(max = 5000) String descricao,
+        @Size(max = 5000, message = "A descrição deve ter no máximo 5000 caracteres")
+        String descricao,
 
         // provisório: vazio = denúncia anônima (será trocado pelo usuário logado quando existir login)
         Integer usuarioId

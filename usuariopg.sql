@@ -1,0 +1,12 @@
+CREATE USER ecoibitita_app WITH PASSWORD 'SENHA_FORTE';
+
+GRANT CONNECT ON DATABASE ecoibitita TO ecoibitita_app;
+GRANT USAGE ON SCHEMA public TO ecoibitita_app;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO ecoibitita_app;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO ecoibitita_app;
+
+-- vale também para tabelas criadas no futuro
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+    GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO ecoibitita_app;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
+    GRANT USAGE, SELECT ON SEQUENCES TO ecoibitita_app;
