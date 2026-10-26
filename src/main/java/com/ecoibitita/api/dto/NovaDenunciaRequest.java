@@ -32,8 +32,7 @@ public record NovaDenunciaRequest(
         String pontoReferencia,
 
         @Size(max = 5000, message = "A descrição deve ter no máximo 5000 caracteres")
-        String descricao,
+        String descricao
 
-        // provisório: vazio = denúncia anônima (será trocado pelo usuário logado quando existir login)
-        Integer usuarioId
+
 ) {}

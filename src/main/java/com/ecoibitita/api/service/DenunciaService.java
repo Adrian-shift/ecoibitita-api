@@ -49,7 +49,7 @@ public class DenunciaService {
                 .filter(CategoriaResiduo::isAtivo)
                 .orElseThrow(() -> erro(HttpStatus.BAD_REQUEST, "Categoria inválida ou inativa"));
 
-        Usuario cidadao = resolverCidadao(req.usuarioId());
+        verificarRecebimentoHabilitado();
 
         Localizacao loc = new Localizacao();
         loc.setLatitude(req.latitude());
@@ -60,7 +60,6 @@ public class DenunciaService {
 
         Denuncia denuncia = new Denuncia();
         denuncia.setCategoria(categoria);
-        denuncia.setCidadao(cidadao);
         denuncia.setLocalizacao(loc);
         denuncia.setDescricao(req.descricao());
 
@@ -74,7 +73,6 @@ public class DenunciaService {
                 imagem.setUrlImagem(salvo.url());
                 imagem.setChaveArmazenamento(salvo.chave());
                 imagem.setTipoImagem(TipoImagem.OCORRENCIA);
-                imagem.setEnviadoPor(cidadao);
                 denuncia.adicionarImagem(imagem);
             }
             return denunciaRepository.save(denuncia);
@@ -101,20 +99,14 @@ public class DenunciaService {
         }
     }
 
-    private Usuario resolverCidadao(Integer usuarioId) {
-        if (usuarioId != null) {
-            return usuarioRepository.findById(usuarioId)
-                    .filter(Usuario::isAtivo)
-                    .orElseThrow(() -> erro(HttpStatus.BAD_REQUEST, "Usuário inválido ou inativo"));
-        }
-        boolean anonimaHabilitada = configuracaoRepository
+    private void verificarRecebimentoHabilitado() {
+        boolean habilitado = configuracaoRepository
                 .findByChave(ConfiguracaoSistema.DENUNCIA_ANONIMA_HABILITADA)
                 .map(ConfiguracaoSistema::valorComoBoolean)
                 .orElse(false);
-        if (!anonimaHabilitada) {
-            throw erro(HttpStatus.FORBIDDEN, "Denúncias anônimas estão desabilitadas. Faça login para denunciar.");
+        if (!habilitado) {
+            throw erro(HttpStatus.FORBIDDEN, "O recebimento de denúncias está temporariamente desabilitado.");
         }
-        return null;
     }
 
     private void apagarEnviados(List<ArmazenamentoImagemService.ArquivoSalvo> enviados) {
