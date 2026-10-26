@@ -33,7 +33,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of(
-                "https://frontend-denuncia.vercel.app",
+                "https://denuncia-nu.vercel.app",
                 "http://localhost:5173"
         ));
 
