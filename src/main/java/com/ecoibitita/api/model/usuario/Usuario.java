@@ -15,6 +15,9 @@ public class Usuario {
     @JoinColumn(name = "perfil_id")
     private Perfil perfil;
 
+    @Column(name = "ultimo_acesso")
+    private OffsetDateTime ultimoAcesso;
+
     @Column(nullable = false, length = 150)
     private String nome;
 
@@ -49,6 +52,10 @@ public class Usuario {
     public void desativar() {
         this.ativo = false;
         this.atualizadoEm = OffsetDateTime.now();
+    }
+
+    public void registrarAcesso(){
+        this.ultimoAcesso = OffsetDateTime.now();
     }
 
     // ---------- getters e setters ----------
@@ -123,5 +130,13 @@ public class Usuario {
 
     public void setAtualizadoEm(OffsetDateTime atualizadoEm) {
         this.atualizadoEm = atualizadoEm;
+    }
+
+    public OffsetDateTime getUltimoAcesso() {
+        return ultimoAcesso;
+    }
+
+    public void setUltimoAcesso(OffsetDateTime ultimoAcesso) {
+        this.ultimoAcesso = ultimoAcesso;
     }
 }

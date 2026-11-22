@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CategoriaResiduoRepository extends JpaRepository<CategoriaResiduo, Integer> {
     List<CategoriaResiduo> findByAtivoTrueOrderByNome();
+    long countByAtivoTrue();
 }

@@ -28,15 +28,18 @@ public class AuthService {
     private final UsuarioRepository usuarioRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtEncoder jwtEncoder;
+    private final AuditoriaService auditoria;
     private final long expiracaoHoras;
 
     public AuthService(UsuarioRepository usuarioRepository,
                        PasswordEncoder passwordEncoder,
                        JwtEncoder jwtEncoder,
+                       AuditoriaService auditoria,
                        @Value("${jwt.expiracao-horas:8}") long expiracaoHoras) {
         this.usuarioRepository = usuarioRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtEncoder = jwtEncoder;
+        this.auditoria = auditoria;
         this.expiracaoHoras = expiracaoHoras;
     }
 
@@ -46,6 +49,10 @@ public class AuthService {
                 .filter(x -> x.temPerfil(Perfil.ADMINISTRADOR) || x.temPerfil(Perfil.FISCAL))
                 .filter(x -> passwordEncoder.matches(req.senha(), x.getSenhaHash()))
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, ERRO_LOGIN));
+
+        u.registrarAcesso();
+        usuarioRepository.save(u);
+        auditoria.registrar(u, "LOGIN", "Usuario", u.getId(), null);
 
         Instant agora = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
