@@ -17,6 +17,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import com.ecoibitita.api.model.usuario.Usuario;
+import com.ecoibitita.api.repository.UsuarioRepository;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +29,7 @@ import java.util.Locale;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, UsuarioRepository usuarioRepository) throws Exception {
         http
                 .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
@@ -45,19 +48,22 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth
-                        .jwt(jwt -> jwt.jwtAuthenticationConverter(conversorJwt())));
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(conversorJwt(usuarioRepository))));
 
         return http.build();
     }
 
     // transforma o campo "perfil" do token em permissão: Administrador -> ROLE_ADMINISTRADOR
-    private JwtAuthenticationConverter conversorJwt() {
+    // Em cada requisição confere no banco se a conta continua ativa e usa o perfil ATUAL
+    // (não o do token), assim desativar ou mudar o perfil vale imediatamente.
+    private JwtAuthenticationConverter conversorJwt(UsuarioRepository usuarioRepository) {
         JwtAuthenticationConverter conversor = new JwtAuthenticationConverter();
         conversor.setJwtGrantedAuthoritiesConverter(jwt -> {
-            String perfil = jwt.getClaimAsString("perfil");
-            if (perfil == null) return List.<GrantedAuthority>of();
-            return List.<GrantedAuthority>of(
-                    new SimpleGrantedAuthority("ROLE_" + perfil.toUpperCase(Locale.ROOT)));
+            Usuario usuario = usuarioRepository.findById(Integer.valueOf(jwt.getSubject()))
+                    .filter(Usuario::isAtivo)
+                    .orElseThrow(() -> new InvalidBearerTokenException("Sessão inválida"));
+            return List.<GrantedAuthority>of(new SimpleGrantedAuthority(
+                    "ROLE_" + usuario.getPerfil().getNome().toUpperCase(Locale.ROOT)));
         });
         return conversor;
     }

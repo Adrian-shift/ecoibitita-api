@@ -1,19 +1,24 @@
 package com.ecoibitita.api.service;
 
+import com.ecoibitita.api.dto.EditarUsuarioRequest;
+import com.ecoibitita.api.dto.NovoUsuarioRequest;
 import com.ecoibitita.api.dto.PaginaResponse;
 import com.ecoibitita.api.dto.ResumoAdminResponse;
 import com.ecoibitita.api.dto.UsuarioAdminResponse;
 import com.ecoibitita.api.model.usuario.Perfil;
 import com.ecoibitita.api.model.usuario.Usuario;
 import com.ecoibitita.api.repository.CategoriaResiduoRepository;
+import com.ecoibitita.api.repository.PerfilRepository;
 import com.ecoibitita.api.repository.RegistroAuditoriaRepository;
 import com.ecoibitita.api.repository.UsuarioRepository;
 import jakarta.persistence.criteria.Predicate;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,16 +38,27 @@ public class AdminUsuarioService {
     private static final List<String> PERFIS_GESTAO = List.of(Perfil.ADMINISTRADOR, Perfil.FISCAL);
 
     private final UsuarioRepository usuarioRepository;
+    private final PerfilRepository perfilRepository;
     private final CategoriaResiduoRepository categoriaRepository;
     private final RegistroAuditoriaRepository auditoriaRepository;
+    private final AuditoriaService auditoria;
+    private final PasswordEncoder passwordEncoder;
 
     public AdminUsuarioService(UsuarioRepository usuarioRepository,
+                               PerfilRepository perfilRepository,
                                CategoriaResiduoRepository categoriaRepository,
-                               RegistroAuditoriaRepository auditoriaRepository) {
+                               RegistroAuditoriaRepository auditoriaRepository,
+                               AuditoriaService auditoria,
+                               PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
+        this.perfilRepository = perfilRepository;
         this.categoriaRepository = categoriaRepository;
         this.auditoriaRepository = auditoriaRepository;
+        this.auditoria = auditoria;
+        this.passwordEncoder = passwordEncoder;
     }
+
+    // ---------- leitura ----------
 
     @Transactional(readOnly = true)
     public ResumoAdminResponse resumo() {
@@ -64,7 +80,7 @@ public class AdminUsuarioService {
     public PaginaResponse<UsuarioAdminResponse> listar(String busca, String perfil, Boolean ativo,
                                                        int pagina, int tamanho) {
         if (perfil != null && !perfil.isBlank() && !PERFIS_GESTAO.contains(perfil)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Perfil inválido");
+            throw erro(HttpStatus.BAD_REQUEST, "Perfil inválido");
         }
         int p = Math.max(pagina, 0);
         int t = Math.min(Math.max(tamanho, 1), MAX_TAMANHO_PAGINA);
@@ -97,5 +113,99 @@ public class AdminUsuarioService {
                 resultado.getSize(),
                 resultado.getTotalElements(),
                 resultado.isLast());
+    }
+
+    // ---------- criar e editar ----------
+
+    @Transactional
+    public UsuarioAdminResponse criar(NovoUsuarioRequest req, Integer idAutor) {
+        Usuario autor = autor(idAutor);
+        Perfil perfil = perfilDaGestao(req.perfil());
+        String email = req.email().trim().toLowerCase();
+
+        if (usuarioRepository.findByEmailIgnoreCase(email).isPresent()) {
+            throw erro(HttpStatus.CONFLICT, "Já existe um usuário com este e-mail");
+        }
+
+        Usuario novo = new Usuario();
+        novo.setPerfil(perfil);
+        novo.setNome(req.nome().trim());
+        novo.setEmail(email);
+        novo.setSenhaHash(passwordEncoder.encode(req.senha()));
+        try {
+            novo = usuarioRepository.saveAndFlush(novo);
+        } catch (DataIntegrityViolationException e) {
+            throw erro(HttpStatus.CONFLICT, "Já existe um usuário com este e-mail");
+        }
+
+        auditoria.registrar(autor, "CRIAR_USUARIO", "Usuario", novo.getId(), "Perfil: " + perfil.getNome());
+        return UsuarioAdminResponse.de(novo);
+    }
+
+    @Transactional
+    public UsuarioAdminResponse editar(Integer id, EditarUsuarioRequest req, Integer idAutor) {
+        Usuario autor = autor(idAutor);
+        Usuario alvo = usuarioRepository.findById(id)
+                .filter(u -> PERFIS_GESTAO.contains(u.getPerfil().getNome()))
+                .orElseThrow(() -> erro(HttpStatus.NOT_FOUND, "Usuário não encontrado"));
+        Perfil novoPerfil = perfilDaGestao(req.perfil());
+
+        boolean mudouPerfil = !novoPerfil.getNome().equals(alvo.getPerfil().getNome());
+        boolean mudouStatus = req.ativo() != alvo.isAtivo();
+
+        // ninguém se tranca para fora do sistema
+        if (alvo.getId().equals(autor.getId()) && (mudouPerfil || !req.ativo())) {
+            throw erro(HttpStatus.BAD_REQUEST, "Você não pode desativar a sua conta nem alterar o seu perfil");
+        }
+        boolean eraAdminAtivo = alvo.isAtivo() && alvo.temPerfil(Perfil.ADMINISTRADOR);
+        boolean continuaAdminAtivo = req.ativo() && Perfil.ADMINISTRADOR.equals(novoPerfil.getNome());
+        if (eraAdminAtivo && !continuaAdminAtivo
+                && usuarioRepository.countByAtivoTrueAndPerfilNomeIn(List.of(Perfil.ADMINISTRADOR)) <= 1) {
+            throw erro(HttpStatus.BAD_REQUEST, "É necessário manter pelo menos um administrador ativo");
+        }
+
+        List<String> alteracoes = new ArrayList<>();
+
+        String nome = req.nome().trim();
+        if (!nome.equals(alvo.getNome())) {
+            alvo.setNome(nome);
+            alteracoes.add("nome");
+        }
+        if (mudouPerfil) {
+            alteracoes.add("perfil " + alvo.getPerfil().getNome() + " -> " + novoPerfil.getNome());
+            alvo.setPerfil(novoPerfil);
+        }
+        if (mudouStatus) {
+            if (req.ativo()) alvo.ativar(); else alvo.desativar();
+            alteracoes.add(req.ativo() ? "ativado" : "desativado");
+        }
+        if (req.novaSenha() != null && !req.novaSenha().isBlank()) {
+            alvo.setSenhaHash(passwordEncoder.encode(req.novaSenha()));
+            alteracoes.add("senha redefinida");
+        }
+
+        if (!alteracoes.isEmpty()) {
+            alvo.setAtualizadoEm(OffsetDateTime.now());
+            // a auditoria guarda o que mudou, nunca a senha
+            auditoria.registrar(autor, "EDITAR_USUARIO", "Usuario", alvo.getId(), String.join("; ", alteracoes));
+        }
+        return UsuarioAdminResponse.de(alvo);
+    }
+
+    private Usuario autor(Integer id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> erro(HttpStatus.UNAUTHORIZED, "Sessão inválida"));
+    }
+
+    private Perfil perfilDaGestao(String nome) {
+        if (nome == null || !PERFIS_GESTAO.contains(nome)) {
+            throw erro(HttpStatus.BAD_REQUEST, "Perfil inválido");
+        }
+        return perfilRepository.findByNome(nome)
+                .orElseThrow(() -> erro(HttpStatus.BAD_REQUEST, "Perfil inválido"));
+    }
+
+    private ResponseStatusException erro(HttpStatus status, String mensagem) {
+        return new ResponseStatusException(status, mensagem);
     }
 }
