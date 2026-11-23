@@ -14,4 +14,7 @@ public interface HistoricoDenunciaRepository extends JpaRepository<HistoricoDenu
     @Query("select h.denuncia.dataRegistro, h.alteradoEm from HistoricoDenuncia h "
             + "where h.statusNovo = :status")
     List<Object[]> datasAteOStatus(@Param("status") StatusDenuncia status);
+
+    @Query("select count(distinct h.usuario.id) from HistoricoDenuncia h")
+    long contarUsuariosEnvolvidos();
 }
